@@ -42,7 +42,6 @@ public class Main {
             default:
                 throw new UnsupportedOperationException("Неподдерживаемая операция");
         }
-
         return String.valueOf(result);
     }
 

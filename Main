@@ -1,1 +1,72 @@
+package org.example;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите строку с математическим выражением, значение которого хотите посчитать.");
+        String input = scanner.nextLine();
+        scanner.close();
+
+        System.out.println(input + " = " + calc(input));
+    }
+
+    public static String calc(String input) {
+        String str = input.strip();
+        String[] parts = validateByLength(str);
+        validateNumbersWithOperation(parts);
+
+        int firstNumber = Integer.parseInt(parts[0]);
+        String operation = parts[1];
+        int secondNumber = Integer.parseInt(parts[2]);
+
+        int result;
+
+        switch (operation) {
+            case "+":
+                result = firstNumber + secondNumber;
+                break;
+            case "-":
+                result = firstNumber - secondNumber;
+                break;
+            case "*":
+                result = firstNumber * secondNumber;
+                break;
+            case "/":
+                if (secondNumber == 0) {
+                    throw new ArithmeticException("Деление на ноль");
+                }
+                result = firstNumber / secondNumber;
+                break;
+            default:
+                throw new UnsupportedOperationException("Неподдерживаемая операция");
+        }
+
+        return String.valueOf(result);
+    }
+
+    private static String[] validateByLength(String input) {
+        String str = input.strip();
+        String[] parts = str.split("(?<=[-+*/])|(?=[-+*/])");
+
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Неверный формат входной строки");
+        }
+        return parts;
+    }
+
+    private static void validateNumbersWithOperation(String[] parts) {
+        try {
+            int firstNumber = Integer.parseInt(parts[0]);
+            int secondNumber = Integer.parseInt(parts[2]);
+
+            if ((firstNumber > 10 || secondNumber > 10) || (firstNumber < 1 || secondNumber < 1)) {
+                throw new IllegalArgumentException("Числа должны быть от 1 до 10 включительно, не более");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Неверный формат чисел");
+        }
+    }
+}
 
